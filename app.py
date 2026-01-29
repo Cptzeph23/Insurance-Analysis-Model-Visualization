@@ -93,11 +93,19 @@ kpis = compute_kpis(df)
 
 
 # -----------------------
+# Forecast Model (Global)
+# -----------------------
+forecast_df, model = build_forecast(df)
+
+
+# -----------------------
 # Sidebar Navigation
 # -----------------------
 
-st.sidebar.markdown("##  Insurance Analytics")
-st.sidebar.markdown("Interactive Business Intelligence Dashboard")
+st.sidebar.markdown("## 🏦 Insurance Intelligence Platform")
+st.sidebar.caption("Executive Analytics • Risk • Forecasting")
+st.sidebar.divider()
+
 
 st.sidebar.title("Navigation")
 page = st.sidebar.radio(
@@ -113,15 +121,26 @@ page = st.sidebar.radio(
 # Page Router
 # -----------------------
 if page == "Executive Overview":
-    st.title(" Executive Overview")
+    st.markdown("# 📊 Executive Overview")
+    st.caption("High-level financial performance and forecast monitoring")
+
 
     # KPI Cards
-    col1, col2, col3, col4 = st.columns(4)
+    st.markdown("### 📊 Key Business Indicators")
 
-    col1.metric("Total Premium", f"{kpis['total_premium']:,.0f}")
-    col2.metric("Net Revenue", f"{kpis['net_revenue']:,.0f}")
-    col3.metric("Outstanding", f"{kpis['total_outstanding']:,.0f}")
-    col4.metric("Outstanding %", f"{kpis['outstanding_ratio']:.1%}")
+    k1, k2, k3, k4 = st.columns(4)
+
+    with k1:
+         st.metric("💰 Total Premium", f"{kpis['total_premium']:,.0f}")
+
+    with k2:
+        st.metric("📈 Net Revenue", f"{kpis['net_revenue']:,.0f}")
+
+    with k3:
+        st.metric("⚠️ Outstanding", f"{kpis['total_outstanding']:,.0f}")
+
+    with k4:
+        st.metric("📉 Outstanding Ratio", f"{kpis['outstanding_ratio']:.1%}")
 
     st.divider()
 
@@ -132,15 +151,16 @@ if page == "Executive Overview":
     colB.plotly_chart(outstanding_distribution_chart(df), use_container_width=True)
 
     # Forecast Section
-    forecast_df, model = build_forecast(df)   
-
     st.plotly_chart(
         forecast_chart(forecast_df),
         use_container_width=True
     )
 
+
 elif page == "Risk & Audit":
-    st.title(" Risk & Audit Dashboard")
+    st.markdown("# 🛡️ Risk & Audit Dashboard")
+    st.caption("Risk exposure, anomaly detection, and audit intelligence")
+
 
     col1, col2, col3 = st.columns(3)
     col1.metric("High Risk Accounts", kpis["high_risk_count"])
@@ -185,7 +205,9 @@ elif page == "Risk & Audit":
 
 
 elif page == "Customer Intelligence":
-    st.title(" Customer Intelligence")
+    st.markdown("# 👥 Customer Intelligence")
+    st.caption("Customer concentration, revenue contribution, and behavior insights")
+
 
     col1, col2 = st.columns(2)
     col1.metric("Active Customers", kpis["active_customers"])
