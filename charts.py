@@ -98,3 +98,19 @@ def customer_distribution_chart(df):
     )
 
     return fig
+
+
+def forecast_chart(forecast):
+    fig = px.line(
+        forecast,
+        x="ds",
+        y=["yhat", "yhat_lower", "yhat_upper"],
+        title="Revenue Forecast"
+    )
+    return fig
+
+
+
+
+
+

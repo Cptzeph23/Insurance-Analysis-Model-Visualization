@@ -1,6 +1,10 @@
 import streamlit as st
 from data_loader import load_data
 from kpis import compute_kpis
+from forecast import build_forecast
+from charts import forecast_chart
+
+
 
 from charts import (
     revenue_trend_chart,
@@ -88,7 +92,7 @@ kpis = compute_kpis(df)
 # Sidebar Navigation
 # -----------------------
 
-st.sidebar.markdown("## 📊 Insurance Analytics")
+st.sidebar.markdown("##  Insurance Analytics")
 st.sidebar.markdown("Interactive Business Intelligence Dashboard")
 
 st.sidebar.title("Navigation")
@@ -105,7 +109,7 @@ page = st.sidebar.radio(
 # Page Router
 # -----------------------
 if page == "Executive Overview":
-    st.title("📊 Executive Overview")
+    st.title(" Executive Overview")
 
     # KPI Cards
     col1, col2, col3, col4 = st.columns(4)
@@ -123,9 +127,14 @@ if page == "Executive Overview":
     colA.plotly_chart(top_customers_chart(df), use_container_width=True)
     colB.plotly_chart(outstanding_distribution_chart(df), use_container_width=True)
 
+    # Forecast Section
+    forecast, model = build_forecast(df)
+    st.plotly_chart(forecast_chart(forecast), use_container_width=True)
+
+
 
 elif page == "Risk & Audit":
-    st.title("⚠️ Risk & Audit Dashboard")
+    st.title(" Risk & Audit Dashboard")
 
     col1, col2, col3 = st.columns(3)
     col1.metric("High Risk Accounts", kpis["high_risk_count"])
@@ -141,7 +150,7 @@ elif page == "Risk & Audit":
 
 
 elif page == "Customer Intelligence":
-    st.title("🧠 Customer Intelligence")
+    st.title(" Customer Intelligence")
 
     col1, col2 = st.columns(2)
     col1.metric("Active Customers", kpis["active_customers"])
