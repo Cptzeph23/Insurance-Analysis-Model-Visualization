@@ -109,8 +109,16 @@ def forecast_chart(forecast):
     )
     return fig
 
-
-
+def anomaly_scatter(df):
+    fig = px.scatter(
+        df,
+        x="premium",
+        y="outstanding",
+        color="anomaly_flag",
+        title="Anomaly Detection: Premium vs Outstanding",
+        hover_data=["insured", "doc_no", "risk_score"]
+    )
+    return fig
 
 
 

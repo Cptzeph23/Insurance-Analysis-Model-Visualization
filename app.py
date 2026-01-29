@@ -3,6 +3,10 @@ from data_loader import load_data
 from kpis import compute_kpis
 from forecast import build_forecast
 from charts import forecast_chart
+from anomaly import detect_anomalies
+from charts import anomaly_scatter
+from exporter import export_excel
+
 
 
 
@@ -128,10 +132,12 @@ if page == "Executive Overview":
     colB.plotly_chart(outstanding_distribution_chart(df), use_container_width=True)
 
     # Forecast Section
-    forecast, model = build_forecast(df)
-    st.plotly_chart(forecast_chart(forecast), use_container_width=True)
+    forecast_df, model = build_forecast(df)   
 
-
+    st.plotly_chart(
+        forecast_chart(forecast_df),
+        use_container_width=True
+    )
 
 elif page == "Risk & Audit":
     st.title(" Risk & Audit Dashboard")
@@ -147,6 +153,35 @@ elif page == "Risk & Audit":
 
     st.subheader("High Risk Policies")
     st.dataframe(df[df["risk_flag"] == True])
+
+    # Anomaly Detection Section
+    df_anomaly = detect_anomalies(df)
+
+    st.subheader("🚨 Anomaly Detection")
+    st.plotly_chart(anomaly_scatter(df_anomaly), use_container_width=True)
+
+    st.subheader("Suspicious Records")
+    st.dataframe(
+        df_anomaly[df_anomaly["anomaly_flag"] == 1]
+        .sort_values("risk_score", ascending=False)
+        .head(50)
+    )
+
+    st.subheader("📥 Export Report")
+
+    excel_file = export_excel(
+    kpis,
+    forecast_df,
+    df_anomaly[df_anomaly["anomaly_flag"] == 1]
+)
+
+    st.download_button(
+    "⬇️ Download Excel Report",
+    excel_file,
+    file_name="insurance_report.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
 
 
 elif page == "Customer Intelligence":
