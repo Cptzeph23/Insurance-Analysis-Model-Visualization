@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/cptzeph/Downloads/Programs/ML/Insurance-Dashboard/insure
+set -gx VIRTUAL_ENV /home/cptzeph/Desktop/Programs/ML/Insurance-Dashboard/insure
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH
